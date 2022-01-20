@@ -1,36 +1,20 @@
 import React from 'react';
-import T from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { createAdvert } from '../../../store/actions';
 
-import { createAdvert } from '../service';
 import Layout from '../../layout';
 import NewAdvertForm from './NewAdvertForm';
-import useMutation from '../../../hooks/useMutation';
 
-function NewAdvertPage({ history }) {
-  const mutation = useMutation(createAdvert);
-
-  const handleSubmit = newAdvert => {
-    mutation
-      .execute(newAdvert)
-      .then(({ id }) => history.push(`/adverts/${id}`));
-  };
-
-  if (mutation.error?.statusCode === 401) {
-    return <Redirect to="/login" />;
-  }
+function NewAdvertPage() {
+  const dispatch = useDispatch();
 
   return (
     <Layout>
-      <NewAdvertForm onSubmit={handleSubmit} />
+      <NewAdvertForm
+        onSubmit={newAdvert => dispatch(createAdvert(newAdvert))}
+      />
     </Layout>
   );
 }
-
-NewAdvertPage.propTypes = {
-  history: T.shape({
-    push: T.func.isRequired,
-  }).isRequired,
-};
 
 export default NewAdvertPage;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-// import { AdvertPage, AdvertsPage, NewAdvertPage } from '../adverts';
+import NewAdvertPage from '../adverts/NewAdvertPage';
 import { LoginPage, PrivateRoute } from '../auth';
 import NotFoundPage from './NotFoundPage';
 
 function App() {
   return (
     <Switch>
-      {/* <PrivateRoute exact path="/adverts/new" component={NewAdvertPage} />
-      <PrivateRoute exact path="/adverts/:advertId">
+      <PrivateRoute exact path="/adverts/new" component={NewAdvertPage} />
+      {/* <PrivateRoute exact path="/adverts/:advertId">
         <AdvertPage />
       </PrivateRoute>
       <PrivateRoute exact path="/adverts">
