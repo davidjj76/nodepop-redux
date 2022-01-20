@@ -4,8 +4,6 @@ import { Redirect, useParams, useHistory } from 'react-router-dom';
 import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
 import { getAdvert, deleteAdvert } from '../service';
-import useQuery from '../../../hooks/useQuery';
-import useMutation from '../../../hooks/useMutation';
 
 function AdvertPage() {
   const { advertId } = useParams();
@@ -14,8 +12,6 @@ function AdvertPage() {
     () => getAdvert(advertId),
     [advertId],
   );
-  const { isLoading, error, data: advert } = useQuery(getAdvertById);
-  const mutation = useMutation(deleteAdvert);
 
   const handleDelete = () => {
     mutation.execute(advertId).then(() => history.push('/'));

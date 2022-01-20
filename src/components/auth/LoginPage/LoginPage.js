@@ -1,15 +1,10 @@
 import React from 'react';
 import T from 'prop-types';
 
-import { useAuthContext } from '../context';
 import { login } from '../service';
 import LoginForm from './LoginForm';
-import useMutation from '../../../hooks/useMutation';
 
 function LoginPage({ location, history }) {
-  const { handleLogin } = useAuthContext();
-  const { isLoading, error, execute, resetError } = useMutation(login);
-
   const handleSubmit = credentials => {
     execute(credentials)
       .then(handleLogin)

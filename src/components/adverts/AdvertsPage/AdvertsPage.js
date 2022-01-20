@@ -8,13 +8,11 @@ import EmptyList from './EmptyList';
 import storage from '../../../utils/storage';
 import { getAdverts } from '../service';
 import { defaultFilters, filterAdverts } from './filters';
-import useQuery from '../../../hooks/useQuery';
 
 const getFilters = () => storage.get('filters') || defaultFilters;
 const saveFilters = filters => storage.set('filters', filters);
 
 function AdvertsPage() {
-  const { isLoading, error, data: adverts = [] } = useQuery(getAdverts);
   const [filters, setFilters] = React.useState(getFilters);
 
   React.useEffect(() => {
