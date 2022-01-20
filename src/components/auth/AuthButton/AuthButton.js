@@ -1,34 +1,24 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import T from 'prop-types';
+import { authLogout } from '../../../store/actions';
+import { getIsLogged } from '../../../store/selectors';
 
 import { ConfirmationButton } from '../../common';
-import { logout } from '../service';
 
-const AuthButton = ({ handleLogout, isLogged }) => {
-  const handleLogoutConfirm = async () => {
-    await mutation.execute();
-    handleLogout();
-  };
+const AuthButton = () => {
+  const isLogged = useSelector(getIsLogged);
+  const dispatch = useDispatch();
 
   return isLogged ? (
     <ConfirmationButton
       confirmation="Are you sure?"
-      onConfirm={handleLogoutConfirm}
+      onConfirm={() => dispatch(authLogout())}
     >
       Logout
     </ConfirmationButton>
   ) : (
     <Link to="/login">Login</Link>
   );
-};
-
-AuthButton.propTypes = {
-  handleLogout: T.func.isRequired,
-  isLogged: T.bool,
-};
-
-AuthButton.defaultProps = {
-  isLogged: false,
 };
 
 export default AuthButton;

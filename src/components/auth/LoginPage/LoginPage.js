@@ -1,25 +1,17 @@
 import React from 'react';
-import T from 'prop-types';
+import { connect } from 'react-redux';
+import { authLogin, uiResetError } from '../../../store/actions';
+import { getUi } from '../../../store/selectors';
 
-import { login } from '../service';
 import LoginForm from './LoginForm';
 
-function LoginPage({ location, history }) {
-  const handleSubmit = credentials => {
-    execute(credentials)
-      .then(handleLogin)
-      .then(() => {
-        const { from } = location.state || { from: { pathname: '/' } };
-        history.replace(from);
-      });
-  };
-
+function LoginPage({ onLogin, loading, error, onErrorClose }) {
   return (
     <div>
-      <LoginForm onSubmit={handleSubmit} />
-      {isLoading && <p>...login in nodepop</p>}
+      <LoginForm onSubmit={onLogin} />
+      {loading && <p>...login in nodepop</p>}
       {error && (
-        <div onClick={resetError} style={{ color: 'red' }}>
+        <div onClick={onErrorClose} style={{ color: 'red' }}>
           {error.message}
         </div>
       )}
@@ -27,10 +19,7 @@ function LoginPage({ location, history }) {
   );
 }
 
-LoginPage.propTypes = {
-  location: T.shape({ state: T.shape({ from: T.object.isRequired }) })
-    .isRequired,
-  history: T.shape({ replace: T.func.isRequired }).isRequired,
-};
+const mapStateToProps = getUi;
+const mapDispatchToProps = { onLogin: authLogin, onErrorClose: uiResetError };
 
-export default LoginPage;
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
