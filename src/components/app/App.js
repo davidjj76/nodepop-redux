@@ -2,8 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { LoginPage, PrivateRoute } from '../auth';
-import AdvertPage from '../adverts/AdvertPage/AdvertPage';
-import NewAdvertPage from '../adverts/NewAdvertPage';
+import { AdvertsPage, NewAdvertPage, AdvertPage } from '../adverts';
 import NotFoundPage from './NotFoundPage';
 
 function App() {
@@ -13,16 +12,16 @@ function App() {
       <PrivateRoute exact path="/adverts/:advertId">
         <AdvertPage />
       </PrivateRoute>
-      {/* <PrivateRoute exact path="/adverts">
+      <PrivateRoute exact path="/adverts">
         <AdvertsPage />
-      </PrivateRoute> */}
+      </PrivateRoute>
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/404">
         <NotFoundPage />
       </Route>
-      {/* <Route exact path="/">
+      <Route exact path="/">
         <Redirect to="/adverts" />
-      </Route> */}
+      </Route>
       <Redirect to="/404" />
     </Switch>
   );

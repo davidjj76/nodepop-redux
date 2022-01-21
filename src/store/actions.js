@@ -4,18 +4,21 @@ import {
   AUTH_LOGIN_SUCCESS,
   AUTH_LOGOUT_SUCCESS,
   UI_RESET_ERROR,
+  ADVERTS_LOADED_REQUEST,
+  ADVERTS_LOADED_SUCCESS,
+  ADVERTS_LOADED_FAILURE,
   ADVERTS_CREATED_FAILURE,
   ADVERTS_CREATED_REQUEST,
   ADVERTS_CREATED_SUCCESS,
-  TAGS_LOADED,
   ADVERTS_DETAIL_REQUEST,
   ADVERTS_DETAIL_SUCCESS,
   ADVERTS_DETAIL_FAILURE,
   ADVERTS_DELETED_REQUEST,
   ADVERTS_DELETED_SUCCESS,
   ADVERTS_DELETED_FAILURE,
+  TAGS_LOADED,
 } from './types';
-import { getAdvert, getAreTagsLoaded } from './selectors';
+import { getAdvert, getAreAdvertsLoaded, getAreTagsLoaded } from './selectors';
 
 function handleError(error, { history }) {
   if (error.statusCode === 401) {
@@ -70,6 +73,37 @@ export function authLogout() {
 export const uiResetError = () => ({
   type: UI_RESET_ERROR,
 });
+
+export const advertsLoadedRequest = () => ({
+  type: ADVERTS_LOADED_REQUEST,
+});
+
+export const advertsLoadedSuccess = adverts => ({
+  type: ADVERTS_LOADED_SUCCESS,
+  payload: adverts,
+});
+
+export const advertsLoadedFailure = error => ({
+  type: ADVERTS_LOADED_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const loadAdverts = () => {
+  return async function (dispatch, getState, { api, history }) {
+    if (getAreAdvertsLoaded(getState())) {
+      return;
+    }
+    dispatch(advertsLoadedRequest());
+    try {
+      const adverts = await api.adverts.getAdverts();
+      dispatch(advertsLoadedSuccess(adverts));
+    } catch (error) {
+      handleError(error, { history });
+      dispatch(advertsLoadedFailure(error));
+    }
+  };
+};
 
 export const advertsCreatedRequest = () => ({
   type: ADVERTS_CREATED_REQUEST,
