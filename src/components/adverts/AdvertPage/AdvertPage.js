@@ -1,29 +1,24 @@
 import React from 'react';
-import { Redirect, useParams, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
-import { getAdvert, deleteAdvert } from '../service';
+import { getAdvert } from '../../../store/selectors';
+import { deleteAdvert, loadAdvert } from '../../../store/actions';
 
 function AdvertPage() {
   const { advertId } = useParams();
-  const history = useHistory();
-  const getAdvertById = React.useCallback(
-    () => getAdvert(advertId),
-    [advertId],
-  );
+  const dispatch = useDispatch();
+  const advert = useSelector(state => getAdvert(state, advertId));
+
+  React.useEffect(() => {
+    dispatch(loadAdvert(advertId));
+  }, [dispatch, advertId]);
 
   const handleDelete = () => {
-    mutation.execute(advertId).then(() => history.push('/'));
+    dispatch(deleteAdvert(advertId));
   };
-
-  if (error?.statusCode === 401 || mutation.error?.statusCode === 401) {
-    return <Redirect to="/login" />;
-  }
-
-  if (error?.statusCode === 404) {
-    return <Redirect to="/404" />;
-  }
 
   return (
     <Layout>

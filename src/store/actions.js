@@ -8,8 +8,14 @@ import {
   ADVERTS_CREATED_REQUEST,
   ADVERTS_CREATED_SUCCESS,
   TAGS_LOADED,
+  ADVERTS_DETAIL_REQUEST,
+  ADVERTS_DETAIL_SUCCESS,
+  ADVERTS_DETAIL_FAILURE,
+  ADVERTS_DELETED_REQUEST,
+  ADVERTS_DELETED_SUCCESS,
+  ADVERTS_DELETED_FAILURE,
 } from './types';
-import { getAreTagsLoaded } from './selectors';
+import { getAdvert, getAreTagsLoaded } from './selectors';
 
 function handleError(error, { history }) {
   if (error.statusCode === 401) {
@@ -90,6 +96,66 @@ export const createAdvert = newAdvert => {
     } catch (error) {
       handleError(error, { history });
       dispatch(advertsCreatedFailure(error));
+    }
+  };
+};
+
+export const advertsDetailRequest = () => ({
+  type: ADVERTS_DETAIL_REQUEST,
+});
+
+export const advertsDetailSuccess = advert => ({
+  type: ADVERTS_DETAIL_SUCCESS,
+  payload: advert,
+});
+
+export const advertsDetailFailure = error => ({
+  type: ADVERTS_DETAIL_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const loadAdvert = advertId => {
+  return async function (dispatch, getState, { api, history }) {
+    if (getAdvert(getState(), advertId)) {
+      return;
+    }
+    dispatch(advertsDetailRequest());
+    try {
+      const advert = await api.adverts.getAdvert(advertId);
+      dispatch(advertsDetailSuccess(advert));
+    } catch (error) {
+      handleError(error, { history });
+      dispatch(advertsDetailFailure(error));
+    }
+  };
+};
+
+export const advertsDeletedRequest = () => ({
+  type: ADVERTS_DELETED_REQUEST,
+});
+
+export const advertsDeletedSuccess = advert => ({
+  type: ADVERTS_DELETED_SUCCESS,
+  payload: advert,
+});
+
+export const advertsDeletedFailure = error => ({
+  type: ADVERTS_DELETED_FAILURE,
+  error: true,
+  payload: error,
+});
+
+export const deleteAdvert = advertId => {
+  return async function (dispatch, getState, { api, history }) {
+    dispatch(advertsDeletedRequest());
+    try {
+      await api.adverts.deleteAdvert(advertId);
+      dispatch(advertsDeletedSuccess(advertId));
+      history.push(`/adverts`);
+    } catch (error) {
+      handleError(error, { history });
+      dispatch(advertsDeletedFailure(error));
     }
   };
 };
