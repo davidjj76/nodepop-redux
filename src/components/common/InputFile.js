@@ -4,7 +4,7 @@ import placeholder from '../../assets/images/placeholder.png';
 
 const defaultAlt = 'placeholder.png';
 
-function InputFile({ onChange, ...props }) {
+function InputFile({ onChange, value, ...props }) {
   const inputRef = React.createRef(null);
   const [img, setImg] = React.useState({ alt: defaultAlt, src: placeholder });
 

@@ -1,51 +1,45 @@
 import T from 'prop-types';
 
-import useForm from '../../form/useForm';
 import SelectTags from '../SelectTags';
 import { RadioGroup, SelectRange } from '../../common';
 import { advert } from '../propTypes';
 import { saleFilter } from './filters';
+import { Form, FormConsumer, Input } from '../../form';
 
 function FiltersForm({ initialFilters, defaultFilters, onFilter, prices }) {
-  const {
-    formValue: filters,
-    setFormValue,
-    handleChange,
-    handleSubmit,
-  } = useForm(initialFilters);
+  const handleResetClick =
+    ({ setFormValue }) =>
+    () => {
+      setFormValue(defaultFilters);
+      onFilter(defaultFilters);
+    };
 
-  const handleResetClick = () => {
-    setFormValue(defaultFilters);
-    onFilter(defaultFilters);
-  };
-
-  const { name, sale, price, tags } = filters;
   const min = Math.min(...prices);
   const max = Math.max(...prices);
 
   return (
-    <form onSubmit={handleSubmit(onFilter)}>
+    <Form onSubmit={onFilter} initialValue={initialFilters}>
       <p>Filters</p>
-      <input name="name" value={name} onChange={handleChange} />
-      <RadioGroup
+      <Input name="name" />
+      <Input
+        component={RadioGroup}
         options={Object.values(saleFilter)}
         name="sale"
-        value={sale}
-        onChange={handleChange}
       />
-      <SelectRange
+      <Input
+        component={SelectRange}
         min={min}
         max={max}
-        value={price}
         name="price"
-        onChange={handleChange}
         style={{ width: 400, margin: 24 }}
         marks={{ [min]: min, [max]: max }}
       />
-      <SelectTags multiple name="tags" value={tags} onChange={handleChange} />
+      <Input component={SelectTags} name="tags" />
       <button type="submit">Filter</button>
-      <button onClick={handleResetClick}>Reset</button>
-    </form>
+      <FormConsumer>
+        {form => <button onClick={handleResetClick(form)}>Reset</button>}
+      </FormConsumer>
+    </Form>
   );
 }
 
