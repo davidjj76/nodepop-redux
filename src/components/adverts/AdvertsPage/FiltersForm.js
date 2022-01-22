@@ -1,6 +1,6 @@
 import T from 'prop-types';
 
-import useForm from '../../../hooks/useForm';
+import useForm from '../../form/useForm';
 import SelectTags from '../SelectTags';
 import { RadioGroup, SelectRange } from '../../common';
 import { advert } from '../propTypes';

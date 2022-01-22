@@ -1,40 +1,29 @@
 import T from 'prop-types';
 
-import useForm from '../../../hooks/useForm';
+import { Form, Input, FormConsumer } from '../../form';
 
 const validEmail = ({ email }) => email;
 const validPassword = ({ password }) => password;
 
 function LoginForm({ onSubmit }) {
-  const {
-    formValue: credentials,
-    handleChange,
-    handleSubmit,
-    validate,
-  } = useForm({
-    email: '',
-    password: '',
-    remember: false,
-  });
-  const { email, password, remember } = credentials;
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input name="email" value={email} onChange={handleChange} />
-      <input
-        type="password"
-        name="password"
-        value={password}
-        onChange={handleChange}
-      />
-      <input
-        type="checkbox"
-        name="remember"
-        checked={remember}
-        onChange={handleChange}
-      />
-      <button disabled={!validate(validEmail, validPassword)}>Login</button>
-    </form>
+    <Form
+      onSubmit={onSubmit}
+      initialValue={{
+        email: '',
+        password: '',
+        remember: false,
+      }}
+    >
+      <Input name="email" />
+      <Input type="password" name="password" />
+      <Input type="checkbox" name="remember" />
+      <FormConsumer>
+        {({ validate }) => (
+          <button disabled={!validate(validEmail, validPassword)}>Login</button>
+        )}
+      </FormConsumer>
+    </Form>
   );
 }
 

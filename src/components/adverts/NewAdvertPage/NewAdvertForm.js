@@ -1,6 +1,6 @@
 import T from 'prop-types';
 
-import useForm from '../../../hooks/useForm';
+import useForm from '../../form/useForm';
 import { InputFile } from '../../common';
 import SelectTags from '../SelectTags';
 
