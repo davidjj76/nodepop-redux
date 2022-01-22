@@ -1,18 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import useStoreAction from '../../../hooks/useStoreAction';
 import { createAdvert } from '../../../store/actions';
 
 import Layout from '../../layout';
 import NewAdvertForm from './NewAdvertForm';
 
 function NewAdvertPage() {
-  const dispatch = useDispatch();
+  const createAdvertAction = useStoreAction(createAdvert);
 
   return (
     <Layout>
-      <NewAdvertForm
-        onSubmit={newAdvert => dispatch(createAdvert(newAdvert))}
-      />
+      <NewAdvertForm onSubmit={createAdvertAction} />
     </Layout>
   );
 }

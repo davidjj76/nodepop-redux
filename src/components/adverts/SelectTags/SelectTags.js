@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import useStoreAction from '../../../hooks/useStoreAction';
+import useStoreData from '../../../hooks/useStoreData';
 
 import { loadTags } from '../../../store/actions';
 import { getTags } from '../../../store/selectors';
@@ -7,10 +8,11 @@ import { getTags } from '../../../store/selectors';
 import { CheckboxGroup } from '../../common';
 
 function SelectTags(props) {
-  const dispatch = useDispatch();
-  const tags = useSelector(getTags);
+  const loadTagsAction = useStoreAction(loadTags);
+  const tags = useStoreData(getTags);
+
   useEffect(() => {
-    dispatch(loadTags());
+    loadTagsAction();
   });
 
   return <CheckboxGroup options={tags} {...props} />;
