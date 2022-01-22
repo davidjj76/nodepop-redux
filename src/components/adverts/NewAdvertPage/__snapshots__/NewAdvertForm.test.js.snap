@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewAdvertForm snapshot 1`] = `
+<div>
+  <form>
+    <label>
+      Name
+      <input
+        name="name"
+        value=""
+      />
+    </label>
+    <label>
+      Sell
+      <input
+        checked=""
+        name="sale"
+        type="checkbox"
+      />
+    </label>
+    <label>
+      Price
+      <input
+        name="price"
+        type="number"
+        value="0"
+      />
+    </label>
+    <label>
+      Tags
+      <div>
+        <label>
+          <input
+            name="tags"
+            type="checkbox"
+            value="motor"
+          />
+          motor
+        </label>
+        <label>
+          <input
+            name="tags"
+            type="checkbox"
+            value="mobile"
+          />
+          mobile
+        </label>
+        <label>
+          <input
+            name="tags"
+            type="checkbox"
+            value="lifestyle"
+          />
+          lifestyle
+        </label>
+        <label>
+          <input
+            name="tags"
+            type="checkbox"
+            value="work"
+          />
+          work
+        </label>
+      </div>
+    </label>
+    <input
+      data-testid="photo-input"
+      name="photo"
+      style="display: none;"
+      type="file"
+    />
+    <img
+      alt="placeholder.png"
+      height="200"
+      src="placeholder.png"
+      style="object-fit: contain;"
+      width="200"
+    />
+    <button
+      disabled=""
+    >
+      Save
+    </button>
+  </form>
+  ;
+</div>
+`;

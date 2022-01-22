@@ -26,16 +26,37 @@ function NewAdvertForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input name="name" value={name} onChange={handleChange} />
-      <input
-        type="checkbox"
-        name="sale"
-        checked={sale}
+      <label>
+        Name
+        <input name="name" value={name} onChange={handleChange} />
+      </label>
+      <label>
+        Sell
+        <input
+          type="checkbox"
+          name="sale"
+          checked={sale}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Price
+        <input
+          type="number"
+          name="price"
+          value={price}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Tags
+        <SelectTags name="tags" value={tags} onChange={handleChange} />
+      </label>
+      <InputFile
+        name="photo"
         onChange={handleChange}
+        data-testid="photo-input"
       />
-      <input type="number" name="price" value={price} onChange={handleChange} />
-      <SelectTags name="tags" value={tags} onChange={handleChange} />
-      <InputFile name="photo" onChange={handleChange} />
       <button disabled={!validate(validName, validPrice, validTags)}>
         Save
       </button>

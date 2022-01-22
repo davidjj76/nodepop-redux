@@ -2,18 +2,20 @@ import React from 'react';
 
 import placeholder from '../../assets/images/placeholder.png';
 
+const defaultAlt = 'placeholder.png';
+
 function InputFile({ onChange, ...props }) {
   const inputRef = React.createRef(null);
-  const [src, setSrc] = React.useState(null);
+  const [img, setImg] = React.useState({ alt: defaultAlt, src: placeholder });
 
   const loadSrcFromFile = file => {
     if (!file) {
-      setSrc(null);
+      setImg({ alt: defaultAlt, src: placeholder });
       return;
     }
     const reader = new FileReader();
     reader.onload = function () {
-      setSrc(reader.result);
+      setImg({ alt: file.name, src: reader.result });
     };
     reader.readAsDataURL(file);
   };
@@ -39,8 +41,8 @@ function InputFile({ onChange, ...props }) {
       />
       <img
         onClick={handleClick}
-        src={src || placeholder}
-        alt=""
+        src={img.src}
+        alt={img.alt}
         width="200"
         height="200"
         style={{ objectFit: 'contain' }}
