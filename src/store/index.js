@@ -2,20 +2,13 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-
+import { errorRedirection, timestamp } from './middlewares';
 import * as reducers from './reducers';
 
 import * as auth from '../components/auth/service';
 import * as adverts from '../components/adverts/service';
 
 const api = { auth, adverts };
-
-// Middleware example: adds timestamp to every action
-const timestamp = store => next => action =>
-  next({
-    ...action,
-    meta: { ...action.meta, timestamp: new Date().getTime() },
-  });
 
 // Reducer enhancer example: for every action saves an entry in history
 const actionsHistory =
@@ -35,6 +28,7 @@ const actionsHistory =
 const configureStore = (preloadedState, { history }) => {
   const middlewares = [
     thunk.withExtraArgument({ api, history }),
+    errorRedirection(history),
     timestamp,
     logger,
   ];

@@ -20,15 +20,6 @@ import {
 } from './types';
 import { getAdvert, getAreAdvertsLoaded, getAreTagsLoaded } from './selectors';
 
-function handleError(error, { history }) {
-  if (error.statusCode === 401) {
-    history.push('/login');
-  }
-  if (error.statusCode === 404) {
-    history.push('/404');
-  }
-}
-
 export const authLoginRequest = () => ({
   type: AUTH_LOGIN_REQUEST,
 });
@@ -52,7 +43,6 @@ export function authLogin(credentials) {
       const { from } = history.location.state || { from: { pathname: '/' } };
       history.replace(from);
     } catch (error) {
-      handleError(error, { history });
       dispatch(authLoginFailure(error));
     }
   };
@@ -90,7 +80,7 @@ export const advertsLoadedFailure = error => ({
 });
 
 export const loadAdverts = () => {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, getState, { api }) {
     if (getAreAdvertsLoaded(getState())) {
       return;
     }
@@ -99,7 +89,6 @@ export const loadAdverts = () => {
       const adverts = await api.adverts.getAdverts();
       dispatch(advertsLoadedSuccess(adverts));
     } catch (error) {
-      handleError(error, { history });
       dispatch(advertsLoadedFailure(error));
     }
   };
@@ -128,7 +117,6 @@ export const createAdvert = newAdvert => {
       dispatch(advertsCreatedSuccess(advert));
       history.push(`/adverts/${advert.id}`);
     } catch (error) {
-      handleError(error, { history });
       dispatch(advertsCreatedFailure(error));
     }
   };
@@ -150,7 +138,7 @@ export const advertsDetailFailure = error => ({
 });
 
 export const loadAdvert = advertId => {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, getState, { api }) {
     if (getAdvert(getState(), advertId)) {
       return;
     }
@@ -159,7 +147,6 @@ export const loadAdvert = advertId => {
       const advert = await api.adverts.getAdvert(advertId);
       dispatch(advertsDetailSuccess(advert));
     } catch (error) {
-      handleError(error, { history });
       dispatch(advertsDetailFailure(error));
     }
   };
@@ -188,7 +175,6 @@ export const deleteAdvert = advertId => {
       dispatch(advertsDeletedSuccess(advertId));
       history.push(`/adverts`);
     } catch (error) {
-      handleError(error, { history });
       dispatch(advertsDeletedFailure(error));
     }
   };

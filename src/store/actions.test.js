@@ -92,7 +92,5 @@ describe('loadAdverts', () => {
       payload: error,
       error: true,
     });
-
-    expect(history.push).toHaveBeenCalledWith('/login');
   });
 });
