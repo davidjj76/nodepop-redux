@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Layout from '../../layout';
 import AdvertDetail from './AdvertDetail';
 import { getAdvert } from '../../../store/selectors';
 import { deleteAdvert, loadAdvert } from '../../../store/actions';
@@ -22,11 +21,7 @@ function AdvertPage() {
     deleteAdvertAction(advertId);
   };
 
-  return (
-    <Layout>
-      {advert && <AdvertDetail {...advert} onDelete={handleDelete} />}
-    </Layout>
-  );
+  return <>{advert && <AdvertDetail {...advert} onDelete={handleDelete} />}</>;
 }
 
 export default AdvertPage;

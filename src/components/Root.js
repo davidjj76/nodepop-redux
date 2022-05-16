@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { unstable_HistoryRouter as Router } from 'react-router-dom';
 
 const Root = ({ children, store, history }) => {
   return (
