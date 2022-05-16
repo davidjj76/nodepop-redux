@@ -1,11 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import useStoreAction from '../../../hooks/useStoreAction';
+import useStoreData from '../../../hooks/useStoreData';
 import { authLogin, uiResetError } from '../../../store/actions';
 import { getUi } from '../../../store/selectors';
 
 import LoginForm from './LoginForm';
 
-function LoginPage({ onLogin, loading, error, onErrorClose }) {
+function LoginPage() {
+  const { loading, error } = useStoreData(getUi);
+  const onLogin = useStoreAction(authLogin);
+  const onErrorClose = useStoreAction(uiResetError);
   return (
     <div>
       <LoginForm onSubmit={onLogin} />
@@ -19,7 +23,4 @@ function LoginPage({ onLogin, loading, error, onErrorClose }) {
   );
 }
 
-const mapStateToProps = getUi;
-const mapDispatchToProps = { onLogin: authLogin, onErrorClose: uiResetError };
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default LoginPage;

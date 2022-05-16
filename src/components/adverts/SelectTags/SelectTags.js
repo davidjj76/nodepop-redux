@@ -13,7 +13,7 @@ function SelectTags(props) {
 
   useEffect(() => {
     loadTagsAction();
-  });
+  }, [loadTagsAction]);
 
   return <CheckboxGroup options={tags} {...props} />;
 }

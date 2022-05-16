@@ -28,7 +28,10 @@ const actionsHistory =
 const configureStore = (preloadedState, { history }) => {
   const middlewares = [
     thunk.withExtraArgument({ api, history }),
-    errorRedirection(history),
+    errorRedirection(history, {
+      401: '/login',
+      404: '/404',
+    }),
     timestamp,
     logger,
   ];

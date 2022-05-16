@@ -35,12 +35,12 @@ export const authLoginFailure = error => ({
 });
 
 export function authLogin(credentials) {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, _getState, { api, history }) {
     dispatch(authLoginRequest());
     try {
       await api.auth.login(credentials);
       dispatch(authLoginSuccess());
-      const { from } = history.location.state || { from: { pathname: '/' } };
+      const from = history.location.state?.from || '/';
       history.replace(from);
     } catch (error) {
       dispatch(authLoginFailure(error));
@@ -53,7 +53,7 @@ export const authLogoutSuccess = () => ({
 });
 
 export function authLogout() {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, _getState, { api, history }) {
     await api.auth.logout();
     dispatch(authLogoutSuccess());
     history.push('/login');
@@ -110,7 +110,7 @@ export const advertsCreatedFailure = error => ({
 });
 
 export const createAdvert = newAdvert => {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, _getState, { api, history }) {
     dispatch(advertsCreatedRequest());
     try {
       const advert = await api.adverts.createAdvert(newAdvert);
@@ -168,7 +168,7 @@ export const advertsDeletedFailure = error => ({
 });
 
 export const deleteAdvert = advertId => {
-  return async function (dispatch, getState, { api, history }) {
+  return async function (dispatch, _getState, { api, history }) {
     dispatch(advertsDeletedRequest());
     try {
       await api.adverts.deleteAdvert(advertId);

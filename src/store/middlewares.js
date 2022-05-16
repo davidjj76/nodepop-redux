@@ -2,21 +2,18 @@
 export const timestamp = store => next => action =>
   next({
     ...action,
-    meta: { ...action.meta, timestamp: new Date().getTime() },
+    meta: { ...action.meta, timestamp: new Date() },
   });
 
-const redirectionsMap = {
-  401: '/login',
-  404: '/404',
-};
-
 // Middleware example: redirects on error actions
-export const errorRedirection = history => store => next => action => {
-  if (action.error) {
-    const redirection = redirectionsMap[action.payload?.statusCode];
-    if (redirection) {
-      history.push(redirection);
+export const errorRedirection =
+  (history, redirectionsMap) => _store => next => action => {
+    const result = next(action);
+    if (action.error) {
+      const redirection = redirectionsMap[action.payload?.statusCode];
+      if (redirection) {
+        history.push(redirection);
+      }
     }
-  }
-  next(action);
-};
+    return result;
+  };
