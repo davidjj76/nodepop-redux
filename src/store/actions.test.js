@@ -83,7 +83,7 @@ describe('loadAdverts', () => {
     const dispatch = jest.fn();
     const error = { statusCode: 401 };
     const history = { push: jest.fn() };
-    api.adverts.getAdverts = () => Promise.reject(error);
+    api.adverts.getAdverts = jest.fn().mockRejectedValue(error);
 
     await action(dispatch, getState, { api, history });
 

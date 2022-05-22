@@ -26,7 +26,7 @@ function App() {
         <Route index element={<NotFoundPage />} />
       </Route>
       <Route path="/" element={<Navigate to="/adverts" />} />
-      <Route path="*" element={<Navigate to="/404" />} />{' '}
+      <Route path="*" element={<Navigate to="/404" />} />
     </Routes>
   );
 }
