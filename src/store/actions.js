@@ -19,20 +19,19 @@ import {
   TAGS_LOADED,
 } from './types';
 import { getAdvert, getAreAdvertsLoaded, getAreTagsLoaded } from './selectors';
+import { createAction } from '@reduxjs/toolkit';
 
-export const authLoginRequest = () => ({
-  type: AUTH_LOGIN_REQUEST,
-});
-
-export const authLoginSuccess = () => ({
-  type: AUTH_LOGIN_SUCCESS,
-});
-
-export const authLoginFailure = error => ({
-  type: AUTH_LOGIN_FAILURE,
-  error: true,
+const errorPrepareAction = error => ({
   payload: error,
+  error: true,
 });
+
+export const authLoginRequest = createAction(AUTH_LOGIN_REQUEST);
+export const authLoginSuccess = createAction(AUTH_LOGIN_SUCCESS);
+export const authLoginFailure = createAction(
+  AUTH_LOGIN_FAILURE,
+  errorPrepareAction,
+);
 
 export function authLogin(credentials) {
   return async function (dispatch, _getState, { api, history }) {
@@ -48,9 +47,7 @@ export function authLogin(credentials) {
   };
 }
 
-export const authLogoutSuccess = () => ({
-  type: AUTH_LOGOUT_SUCCESS,
-});
+export const authLogoutSuccess = createAction(AUTH_LOGOUT_SUCCESS);
 
 export function authLogout() {
   return async function (dispatch, _getState, { api, history }) {
@@ -60,24 +57,14 @@ export function authLogout() {
   };
 }
 
-export const uiResetError = () => ({
-  type: UI_RESET_ERROR,
-});
+export const uiResetError = createAction(UI_RESET_ERROR);
 
-export const advertsLoadedRequest = () => ({
-  type: ADVERTS_LOADED_REQUEST,
-});
-
-export const advertsLoadedSuccess = adverts => ({
-  type: ADVERTS_LOADED_SUCCESS,
-  payload: adverts,
-});
-
-export const advertsLoadedFailure = error => ({
-  type: ADVERTS_LOADED_FAILURE,
-  error: true,
-  payload: error,
-});
+export const advertsLoadedRequest = createAction(ADVERTS_LOADED_REQUEST);
+export const advertsLoadedSuccess = createAction(ADVERTS_LOADED_SUCCESS);
+export const advertsLoadedFailure = createAction(
+  ADVERTS_LOADED_FAILURE,
+  errorPrepareAction,
+);
 
 export const loadAdverts = () => {
   return async function (dispatch, getState, { api }) {
@@ -94,20 +81,12 @@ export const loadAdverts = () => {
   };
 };
 
-export const advertsCreatedRequest = () => ({
-  type: ADVERTS_CREATED_REQUEST,
-});
-
-export const advertsCreatedSuccess = advert => ({
-  type: ADVERTS_CREATED_SUCCESS,
-  payload: advert,
-});
-
-export const advertsCreatedFailure = error => ({
-  type: ADVERTS_CREATED_FAILURE,
-  error: true,
-  payload: error,
-});
+export const advertsCreatedRequest = createAction(ADVERTS_CREATED_REQUEST);
+export const advertsCreatedSuccess = createAction(ADVERTS_CREATED_SUCCESS);
+export const advertsCreatedFailure = createAction(
+  ADVERTS_CREATED_FAILURE,
+  errorPrepareAction,
+);
 
 export const createAdvert = newAdvert => {
   return async function (dispatch, _getState, { api, history }) {
@@ -122,20 +101,12 @@ export const createAdvert = newAdvert => {
   };
 };
 
-export const advertsDetailRequest = () => ({
-  type: ADVERTS_DETAIL_REQUEST,
-});
-
-export const advertsDetailSuccess = advert => ({
-  type: ADVERTS_DETAIL_SUCCESS,
-  payload: advert,
-});
-
-export const advertsDetailFailure = error => ({
-  type: ADVERTS_DETAIL_FAILURE,
-  error: true,
-  payload: error,
-});
+export const advertsDetailRequest = createAction(ADVERTS_DETAIL_REQUEST);
+export const advertsDetailSuccess = createAction(ADVERTS_DETAIL_SUCCESS);
+export const advertsDetailFailure = createAction(
+  ADVERTS_DETAIL_FAILURE,
+  errorPrepareAction,
+);
 
 export const loadAdvert = advertId => {
   return async function (dispatch, getState, { api }) {
@@ -152,20 +123,12 @@ export const loadAdvert = advertId => {
   };
 };
 
-export const advertsDeletedRequest = () => ({
-  type: ADVERTS_DELETED_REQUEST,
-});
-
-export const advertsDeletedSuccess = advert => ({
-  type: ADVERTS_DELETED_SUCCESS,
-  payload: advert,
-});
-
-export const advertsDeletedFailure = error => ({
-  type: ADVERTS_DELETED_FAILURE,
-  error: true,
-  payload: error,
-});
+export const advertsDeletedRequest = createAction(ADVERTS_DELETED_REQUEST);
+export const advertsDeletedSuccess = createAction(ADVERTS_DELETED_SUCCESS);
+export const advertsDeletedFailure = createAction(
+  ADVERTS_DELETED_FAILURE,
+  errorPrepareAction,
+);
 
 export const deleteAdvert = advertId => {
   return async function (dispatch, _getState, { api, history }) {
@@ -180,10 +143,7 @@ export const deleteAdvert = advertId => {
   };
 };
 
-export const tagsLoaded = tags => ({
-  type: TAGS_LOADED,
-  payload: tags,
-});
+export const tagsLoaded = createAction(TAGS_LOADED);
 
 export const loadTags = () => {
   return async function (dispatch, getState, { api }) {

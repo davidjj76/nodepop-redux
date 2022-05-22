@@ -1,13 +1,14 @@
+import { createReducer } from '@reduxjs/toolkit';
 import {
-  ADVERTS_CREATED_SUCCESS,
-  ADVERTS_DELETED_SUCCESS,
-  ADVERTS_DETAIL_SUCCESS,
-  ADVERTS_LOADED_SUCCESS,
-  AUTH_LOGIN_SUCCESS,
-  AUTH_LOGOUT_SUCCESS,
-  TAGS_LOADED,
-  UI_RESET_ERROR,
-} from './types';
+  advertsCreatedSuccess,
+  advertsDeletedSuccess,
+  advertsDetailSuccess,
+  advertsLoadedSuccess,
+  authLoginSuccess,
+  authLogoutSuccess,
+  tagsLoaded,
+  uiResetError,
+} from './actions';
 
 export const initialState = {
   auth: false,
@@ -22,50 +23,52 @@ export const initialState = {
   },
 };
 
-export function auth(state = initialState.auth, action) {
-  switch (action.type) {
-    case AUTH_LOGIN_SUCCESS:
-      return true;
-    case AUTH_LOGOUT_SUCCESS:
-      return false;
-    default:
-      return state;
-  }
-}
+export const auth = createReducer(initialState.auth, builder => {
+  builder
+    .addCase(authLoginSuccess, () => true)
+    .addCase(authLogoutSuccess, () => false);
+});
 
-export const adverts = (state = initialState.adverts, action) => {
-  switch (action.type) {
-    case ADVERTS_LOADED_SUCCESS:
-      return { ...state, loaded: true, data: action.payload };
-    case ADVERTS_CREATED_SUCCESS:
-    case ADVERTS_DETAIL_SUCCESS:
-      return { ...state, data: [...state.data, action.payload] };
-    case ADVERTS_DELETED_SUCCESS:
-      return {
-        ...state,
-        data: state.data.filter(advert => advert.id !== action.payload),
-      };
-    default:
-      return state;
-  }
-};
+export const adverts = createReducer(initialState.adverts, builder => {
+  builder
+    .addCase(advertsLoadedSuccess, (_state, action) => ({
+      loaded: true,
+      data: action.payload,
+    }))
+    .addCase(advertsCreatedSuccess, (state, action) => {
+      state.data.push(action.payload);
+    })
+    .addCase(advertsDetailSuccess, (state, action) => {
+      state.data.push(action.payload);
+    })
+    .addCase(advertsDeletedSuccess, (state, action) => {
+      state.data = state.data.filter(advert => advert.id !== action.payload);
+    });
+});
 
-export const tags = (state = initialState.tags, action) =>
-  action.type === TAGS_LOADED ? action.payload : state;
+export const tags = createReducer(initialState.tags, builder => {
+  builder.addCase(tagsLoaded, (_state, action) => action.payload);
+});
 
-export function ui(state = initialState.ui, action) {
-  if (action.error) {
-    return { ...state, loading: false, error: action.payload };
-  }
-  if (/_REQUEST$/.test(action.type)) {
-    return { ...state, loading: true, error: null };
-  }
-  if (/_SUCCESS$/.test(action.type)) {
-    return { ...state, loading: false, error: null };
-  }
+const isErrorAction = action => action.error;
+const isRequestAction = action => /_REQUEST$/.test(action.type);
+const isSuccessAction = action => /_SUCCESS$/.test(action.type);
 
-  if (action.type === UI_RESET_ERROR) {
-    return { ...state, error: null };
-  }
-  return state;
-}
+export const ui = createReducer(initialState.ui, builder => {
+  builder
+    .addCase(uiResetError, state => {
+      state.error = null;
+    })
+    .addMatcher(isRequestAction, () => ({
+      loading: true,
+      error: null,
+    }))
+    .addMatcher(isSuccessAction, () => ({
+      loading: false,
+      error: null,
+    }))
+    .addMatcher(isErrorAction, (_state, action) => ({
+      loading: false,
+      error: action.payload,
+    }));
+});
