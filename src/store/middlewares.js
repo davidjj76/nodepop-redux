@@ -1,8 +1,8 @@
 // Middleware example: adds timestamp to every action
-export const timestamp = store => next => action =>
+export const timestamp = _store => next => action =>
   next({
     ...action,
-    meta: { ...action.meta, timestamp: new Date() },
+    meta: { ...action.meta, timestamp: new Date().getTime() },
   });
 
 // Middleware example: redirects on error actions

@@ -1,6 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { errorRedirection, timestamp } from './middlewares';
 import * as reducers from './reducers';
@@ -25,23 +23,24 @@ const actionsHistory =
     return createStore(actionsHistoryReducer, initialState, enhancer);
   };
 
-const configureStore = (preloadedState, { history }) => {
-  const middlewares = [
-    thunk.withExtraArgument({ api, history }),
-    errorRedirection(history, {
-      401: '/login',
-      404: '/404',
-    }),
-    timestamp,
-    logger,
-  ];
-
-  const store = createStore(
-    combineReducers(reducers),
+export default function customConfigureStore(preloadedState, { history }) {
+  const store = configureStore({
     preloadedState,
-    composeWithDevTools(applyMiddleware(...middlewares), actionsHistory(10)),
-  );
+    reducer: { ...reducers },
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware({
+        thunk: {
+          extraArgument: { api, history },
+        },
+      }).concat(
+        errorRedirection(history, {
+          401: '/login',
+          404: '/404',
+        }),
+        timestamp,
+        logger,
+      ),
+    enhancers: [actionsHistory(10)],
+  });
   return store;
-};
-
-export default configureStore;
+}
