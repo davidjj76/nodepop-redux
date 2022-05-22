@@ -51,8 +51,8 @@ export const tags = createReducer(initialState.tags, builder => {
 });
 
 const isErrorAction = action => action.error;
-const isRequestAction = action => /_REQUEST$/.test(action.type);
-const isSuccessAction = action => /_SUCCESS$/.test(action.type);
+const isRequestAction = action => action.type.endsWith('_REQUEST');
+const isSuccessAction = action => action.type.endsWith('_SUCCESS');
 
 export const ui = createReducer(initialState.ui, builder => {
   builder
